@@ -1,6 +1,6 @@
 # Source Watcher — Example Pipelines
 
-This repository contains ready-to-run example pipelines for [Source Watcher](https://github.com/TheCocoTeam/source-watcher).
+This repository contains ready-to-run example pipelines for [Source Watcher](https://github.com/TheCocoTeam/source-watcher-api).
 
 Each file uses the `.swt` (Source Watcher Transformation) format — a JSON array of steps (extractors, transformers, loaders) that define a pipeline.
 
