@@ -1,0 +1,54 @@
+[
+    {
+        "type": "extractor",
+        "name": "Csv",
+        "options": {
+            "filePath": "https:\/\/people.sc.fsu.edu\/~jburkardt\/data\/csv\/oscar_age_female.csv",
+            "columns": [
+                "Year",
+                "Name",
+                "Movie"
+            ],
+            "delimiter": ",",
+            "enclosure": "\""
+        },
+        "x": 80,
+        "y": 100
+    },
+    {
+        "type": "transformer",
+        "name": "ConvertCase",
+        "options": {
+            "columns": [
+                "Movie"
+            ],
+            "mode": "title",
+            "encoding": "UTF-8"
+        },
+        "x": 260,
+        "y": 100
+    },
+    {
+        "type": "transformer",
+        "name": "RenameColumns",
+        "options": {
+            "columns": {
+                "\"movie\"": "\"Preferred_Movie\""
+            }
+        },
+        "x": 440,
+        "y": 100
+    },
+    {
+        "type": "loader",
+        "name": "Database",
+        "options": {
+            "driver": "pdo_sqlite",
+            "tableName": "people",
+            "path": "\/var\/www\/html\/.source-watcher\/test-jp.db",
+            "memory": false
+        },
+        "x": 620,
+        "y": 100
+    }
+]
