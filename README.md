@@ -2,7 +2,7 @@
 
 This repository contains ready-to-run example pipelines for [Source Watcher](https://github.com/TheCocoTeam/source-watcher-api).
 
-Each file uses the `.swt` (Source Watcher Transformation) format - a JSON array of steps (extractors, transformers, loaders) that define a pipeline.
+Each file is a JSON pipeline definition validated against the [pipeline schema](https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json). A pipeline is a `steps` array of extractors, transformers, and loaders.
 
 ---
 
@@ -11,7 +11,7 @@ Each file uses the `.swt` (Source Watcher Transformation) format - a JSON array 
 - Source Watcher API running locally (default: `http://localhost:8181`)
 - A valid JWT token (obtain via `POST /api/v1/credentials`)
 
-Place `.swt` files inside `.source-watcher/transformations/` in the API container's working directory, then run them from the board UI or via `curl`.
+Place `.json` pipeline files inside `.source-watcher/transformations/` in the API container's working directory, then run them from the board UI or via `curl`.
 
 ### Run via curl
 
@@ -212,29 +212,33 @@ sqlite3 .source-watcher/guess-gender.db "SELECT first_name, last_name, gender FR
 
 ## File format reference
 
-Each `.swt` file is a JSON array. Each element is a step:
+Each pipeline file is a JSON object with a `$schema` reference and a `steps` array:
 
 ```json
-[
-  {
-    "type": "extractor",
-    "name": "Csv",
-    "options": { "filePath": "...", "columns": ["A", "B"] },
-    "x": 80,
-    "y": 100
-  },
-  {
-    "type": "loader",
-    "name": "Database",
-    "options": { "driver": "pdo_sqlite", "tableName": "my_table", "path": "/path/to/output.db" },
-    "x": 300,
-    "y": 100
-  }
-]
+{
+  "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+  "steps": [
+    {
+      "type": "extractor",
+      "name": "Csv",
+      "options": { "filePath": "...", "columns": ["A", "B"] },
+      "x": 80,
+      "y": 100
+    },
+    {
+      "type": "loader",
+      "name": "Database",
+      "options": { "driver": "pdo_sqlite", "tableName": "my_table", "path": "/path/to/output.db" },
+      "x": 300,
+      "y": 100
+    }
+  ]
+}
 ```
 
 | Field | Description |
 |---|---|
+| `$schema` | Points to the pipeline JSON Schema for editor validation and autocomplete |
 | `type` | `extractor`, `execution-extractor`, `transformer`, or `loader` |
 | `name` | Core step name (e.g. `Csv`, `Json`, `ConvertCase`, `Database`) |
 | `options` | Step-specific configuration |
