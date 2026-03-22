@@ -1,0 +1,28 @@
+{
+    "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "steps": [
+        {
+            "type": "extractor",
+            "name": "TesseractOcr",
+            "options": {
+                "filePath": "/var/www/html/.source-watcher/data/image-with-text.jpg",
+                "column": "text",
+                "language": "eng"
+            },
+            "x": 80,
+            "y": 100
+        },
+        {
+            "type": "loader",
+            "name": "Database",
+            "options": {
+                "driver": "pdo_sqlite",
+                "tableName": "ocr_lines",
+                "path": "/var/www/html/.source-watcher/ocr-output.db",
+                "memory": false
+            },
+            "x": 320,
+            "y": 100
+        }
+    ]
+}
