@@ -36,7 +36,7 @@
         "options": {
             "driver": "pdo_sqlite",
             "tableName": "people",
-            "path": "\/var\/www\/html\/.source-watcher\/test-jp.db",
+            "path": "\/var\/www\/html\/.source-watcher\/csv-lower.db",
             "memory": false
         },
         "x": 440,

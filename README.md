@@ -1,8 +1,8 @@
-# Source Watcher — Example Pipelines
+# Source Watcher - Example Pipelines
 
 This repository contains ready-to-run example pipelines for [Source Watcher](https://github.com/TheCocoTeam/source-watcher-api).
 
-Each file uses the `.swt` (Source Watcher Transformation) format — a JSON array of steps (extractors, transformers, loaders) that define a pipeline.
+Each file uses the `.swt` (Source Watcher Transformation) format - a JSON array of steps (extractors, transformers, loaders) that define a pipeline.
 
 ---
 
@@ -44,10 +44,10 @@ Fetches the [Oscar Female Winners CSV](https://people.sc.fsu.edu/~jburkardt/data
 |---|---|
 | Source | `https://people.sc.fsu.edu/~jburkardt/data/csv/oscar_age_female.csv` |
 | Output table | `people` |
-| Output file | `.source-watcher/test-jp.db` |
+| Output file | `.source-watcher/csv-lower.db` |
 
 ```bash
-sqlite3 .source-watcher/test-jp.db "SELECT * FROM people LIMIT 5;"
+sqlite3 .source-watcher/csv-lower.db "SELECT * FROM people LIMIT 5;"
 ```
 
 ---
@@ -62,10 +62,10 @@ Same source CSV as above. Converts column names to lowercase, then renames `movi
 |---|---|
 | Source | `https://people.sc.fsu.edu/~jburkardt/data/csv/oscar_age_female.csv` |
 | Output table | `people` |
-| Output file | `.source-watcher/test-2-jp.db` |
+| Output file | `.source-watcher/csv-lower-rename.db` |
 
 ```bash
-sqlite3 .source-watcher/test-2-jp.db "SELECT * FROM people LIMIT 5;"
+sqlite3 .source-watcher/csv-lower-rename.db "SELECT * FROM people LIMIT 5;"
 ```
 
 ---
@@ -80,9 +80,9 @@ Fetches the Oscar CSV, applies Title Case to the `Movie` column name, then renam
 |---|---|
 | Source | `https://people.sc.fsu.edu/~jburkardt/data/csv/oscar_age_female.csv` |
 | Output table | `people` |
-| Output file | `.source-watcher/test-jp.db` |
+| Output file | `.source-watcher/csv-title-rename-1.db` |
 
-> `csv-title-rename-to-sqlite-2` and `csv-title-rename-to-sqlite-3` are variants testing different column mapping styles.
+> `csv-title-rename-to-sqlite-2` and `csv-title-rename-to-sqlite-3` are variants that write to `csv-title-rename-2.db` and `csv-title-rename-3.db` respectively, testing different column mapping styles.
 
 ---
 
@@ -109,17 +109,17 @@ sqlite3 .source-watcher/cve-metadata.db "SELECT cveId, title, state FROM cve_met
 
 **Steps:** JSON Extractor (URL) → Database Loader
 
-Same CVE source as above, but extracts deeper nested fields — including arrays stored as JSON strings — giving a richer view of the record.
+Same CVE source as above, but extracts deeper nested fields - including arrays stored as JSON strings - giving a richer view of the record.
 
 | Detail | Value |
 |---|---|
 | Source | `https://cveawg.mitre.org/api/cve/CVE-2026-3494` |
 | Columns | `dataType`, `dataVersion`, `cveId`, `state`, `assignerShortName`, `datePublished`, `dateUpdated`, `title`, `descriptionText`, `descriptionsJson`, `affectedJson`, `metricsJson`, `referencesJson`, `problemTypesJson` |
 | Output table | `cve_deep` |
-| Output file | `.source-watcher/cve-deep-3.db` |
+| Output file | `.source-watcher/cve-json-deep.db` |
 
 ```bash
-sqlite3 .source-watcher/cve-deep-3.db "SELECT cveId, title, descriptionText FROM cve_deep;"
+sqlite3 .source-watcher/cve-json-deep.db "SELECT cveId, title, descriptionText FROM cve_deep;"
 ```
 
 ---

@@ -45,7 +45,7 @@
         "options": {
             "driver": "pdo_sqlite",
             "tableName": "people",
-            "path": "\/var\/www\/html\/.source-watcher\/test-jp.db",
+            "path": "\/var\/www\/html\/.source-watcher\/csv-title-rename-2.db",
             "memory": false
         },
         "x": 620,
