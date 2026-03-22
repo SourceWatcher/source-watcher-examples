@@ -165,6 +165,51 @@ sqlite3 .source-watcher/txt-lines.db "SELECT * FROM lines;"
 
 ---
 
+### `find-missing-ids`
+
+**Steps:** CSV Extractor → Find Missing From Sequence → Database Loader
+
+Reads a CSV file containing a numeric `id` column with intentional gaps (`1, 2, 3, 5, 6, 9, 10`), finds the missing integers in the sequence (`4, 7, 8`), and writes them to a SQLite table.
+
+Demonstrates the `FindMissingFromSequenceExtractor`, which chains from the previous extractor's result, sorts the numeric column, and outputs any integers absent between the min and max values.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-sequence.csv` (local) |
+| Sequence column | `id` |
+| Output table | `missing_ids` |
+| Output file | `.source-watcher/find-missing-ids.db` |
+
+```bash
+sqlite3 .source-watcher/find-missing-ids.db "SELECT * FROM missing_ids;"
+# Expected: rows with id = 4, 7, 8
+```
+
+---
+
+### `guess-gender-from-names`
+
+**Steps:** CSV Extractor → Guess Gender → Database Loader
+
+Reads a CSV with `id`, `first_name`, and `last_name` columns, uses a name dictionary to guess the gender from the `first_name` column, adds a `gender` column to each row, and loads the enriched data into SQLite.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-names.csv` (local) |
+| First name column | `first_name` |
+| Output gender column | `gender` |
+| Country dictionary | `usa` |
+| Output table | `people_with_gender` |
+| Output file | `.source-watcher/guess-gender.db` |
+
+```bash
+sqlite3 .source-watcher/guess-gender.db "SELECT first_name, last_name, gender FROM people_with_gender;"
+```
+
+> The transformer only fills in the `gender` column if it is currently empty. Rows that already have a value are left unchanged.
+
+---
+
 ## File format reference
 
 Each `.swt` file is a JSON array. Each element is a step:

@@ -1,0 +1,35 @@
+[
+    {
+        "type": "extractor",
+        "name": "Csv",
+        "options": {
+            "filePath": "/var/www/html/.source-watcher/data/sample-sequence.csv",
+            "columns": ["id", "label"],
+            "delimiter": ",",
+            "enclosure": "\""
+        },
+        "x": 80,
+        "y": 100
+    },
+    {
+        "type": "execution-extractor",
+        "name": "FindMissingFromSequence",
+        "options": {
+            "filterField": "id"
+        },
+        "x": 300,
+        "y": 100
+    },
+    {
+        "type": "loader",
+        "name": "Database",
+        "options": {
+            "driver": "pdo_sqlite",
+            "tableName": "missing_ids",
+            "path": "/var/www/html/.source-watcher/find-missing-ids.db",
+            "memory": false
+        },
+        "x": 520,
+        "y": 100
+    }
+]
