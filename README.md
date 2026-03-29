@@ -1,8 +1,8 @@
 # Source Watcher - Example Pipelines
 
-This repository contains ready-to-run example pipelines for [Source Watcher](https://github.com/TheCocoTeam/source-watcher-api).
+Example pipeline JSON files for the [Source Watcher API](https://github.com/TheCocoTeam/source-watcher-api), kept under `source-watcher-api/.source-watcher/transformations/` (or `~/.source-watcher/transformations/` when the API resolves the user home directory at run time).
 
-Each file is a JSON pipeline definition validated against the [pipeline schema](https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json). A pipeline is a `steps` array of extractors, transformers, and loaders.
+Each file is validated against the [pipeline schema](https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json). A pipeline is a `steps` array of extractors, transformers, and loaders.
 
 ---
 
@@ -11,7 +11,9 @@ Each file is a JSON pipeline definition validated against the [pipeline schema](
 - Source Watcher API running locally (default: `http://localhost:8181`)
 - A valid JWT token (obtain via `POST /api/v1/credentials`)
 
-Place `.json` pipeline files inside `.source-watcher/transformations/` in the API container's working directory, then run them from the board UI or via `curl`.
+Place `.json` pipeline files in this `transformations/` directory (API container: typically mounted as `/var/www/html/.source-watcher/transformations/`), then run them from the board UI or via `curl`.
+
+**SQLite examples:** Loader paths in JSON use `/var/www/html/.source-watcher/*.db` (container). On your host, the same files usually live at `source-watcher-api/.source-watcher/*.db`. Run `sqlite3` against those paths from the repo root or use absolute paths.
 
 ### Run via curl
 
@@ -82,7 +84,7 @@ Fetches the Oscar CSV, applies Title Case to the `Movie` column name, then renam
 | Output table | `people` |
 | Output file | `.source-watcher/csv-title-rename-1.db` |
 
-> `csv-title-rename-to-sqlite-2` and `csv-title-rename-to-sqlite-3` are variants that write to `csv-title-rename-2.db` and `csv-title-rename-3.db` respectively, testing different column mapping styles.
+> **`csv-title-rename-to-sqlite-2`** and **`csv-title-rename-to-sqlite-3`** write to `csv-title-rename-2.db` and `csv-title-rename-3.db` and use different `RenameColumns` option shapes (lowercase `movie`, and quoted keys in JSON). After the Title `ConvertCase` step, the column key is still `Movie`; variant **2** maps from `movie`, which **does not** match `Movie` unless you add a step that lowercases that column name first—treat **2** and **3** as mapping-style experiments, not guaranteed end-to-end demos.
 
 ---
 
@@ -134,7 +136,7 @@ Demonstrates the remote SQLite file download capability of the Database extracto
 
 | Detail | Value |
 |---|---|
-| Source | Chinook SQLite via `https://raw.githubusercontent.com/...` |
+| Source | `https://raw.githubusercontent.com/lerocha/chinook-database/refs/heads/master/ChinookDatabase/DataSources/Chinook_Sqlite.sqlite` |
 | Query | `SELECT ArtistId, Name AS ArtistName, Title AS AlbumTitle FROM Artist JOIN Album … LIMIT 50` |
 | Output table | `artist_albums` |
 | Output file | `.source-watcher/chinook-artists.db` |
@@ -151,7 +153,7 @@ sqlite3 .source-watcher/chinook-artists.db "SELECT * FROM artist_albums LIMIT 10
 
 **Steps:** Txt Extractor → Convert Case → Database Loader
 
-Reads a plain text file line by line (each line becomes one row), applies Title Case to the line content, and loads into SQLite.
+Reads a plain text file line by line (each line becomes one row in the `line` column). **`ConvertCase` renames column keys, not cell values:** with `mode: title` on `line`, the attribute becomes **`Line`** (title case of the name `line`); the text on each row is unchanged. Loads into SQLite.
 
 | Detail | Value |
 |---|---|
@@ -207,6 +209,53 @@ sqlite3 .source-watcher/guess-gender.db "SELECT first_name, last_name, gender FR
 ```
 
 > The transformer only fills in the `gender` column if it is currently empty. Rows that already have a value are left unchanged.
+
+---
+
+### `ocr-image-to-sqlite`
+
+**Steps:** Tesseract OCR Extractor → Database Loader
+
+Extracts text from a local image file (PNG, JPEG, TIFF, etc.) using Tesseract. Each non-empty line of OCR output becomes one row.
+
+| Detail | Value |
+|---|---|
+| Source | `/var/www/html/.source-watcher/data/image-with-text.jpg` (place your own image in `.source-watcher/data/`) |
+| Output table | `ocr_lines` |
+| Output file | `.source-watcher/ocr-output.db` |
+
+**Prerequisites:** `tesseract-ocr` (and language data, e.g. `tesseract-ocr-eng`) installed in the API container.
+
+```bash
+sqlite3 .source-watcher/ocr-output.db "SELECT * FROM ocr_lines LIMIT 10;"
+```
+
+---
+
+### `ocr-pdf-to-sqlite`
+
+**Steps:** PDF Extractor → Database Loader
+
+Extracts text from any PDF (text-layer, scanned, or mixed). Uses `pdftotext` when a page has enough embedded text; otherwise renders the page and runs Tesseract OCR.
+
+| Detail | Value |
+|---|---|
+| Source | `/var/www/html/.source-watcher/data/sample.pdf` (replace with your PDF path) |
+| Output table | `pdf_lines` |
+| Output file | `.source-watcher/pdf-output.db` |
+| Options | `column` (default `text`), `pageColumn` (default `page`; use `""` to omit page numbers), `language` (Tesseract code for OCR fallback, default `eng`) |
+
+**Prerequisites:** `poppler-utils` and `tesseract-ocr` in the API container.
+
+```bash
+sqlite3 .source-watcher/pdf-output.db "SELECT page, text FROM pdf_lines LIMIT 20;"
+```
+
+---
+
+### `test-error-reporting` (development)
+
+Intentionally invalid pipeline (empty `filePath` on the CSV step) used to verify API/board error responses. Not a runnable example for end users.
 
 ---
 
