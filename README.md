@@ -36,6 +36,68 @@ curl -X POST http://localhost:8181/api/v1/transformation-run \
 
 ## Pipelines
 
+### `deduplicate-rows-to-sqlite`
+
+**Steps:** CSV Extractor → Deduplicate Rows → Database Loader
+
+Reads a local CSV containing repeated IDs, keeps the row with the greatest
+`updated_at` value for each ID, and writes the deduplicated rows to SQLite.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-duplicates.csv` |
+| Keys | `id` |
+| Selection | Last row ordered by `updated_at` ascending |
+| Output table | `deduplicated_people` |
+| Output file | `.source-watcher/deduplicate-rows.db` |
+
+```bash
+sqlite3 .source-watcher/deduplicate-rows.db "SELECT * FROM deduplicated_people;"
+```
+
+---
+
+### `sort-sequence-to-sqlite`
+
+**Steps:** CSV Extractor → Sort Rows → Database Loader
+
+Reads the local sample numeric sequence, sorts it by numeric `id` in descending
+order, and writes the ordered rows to SQLite.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-sequence.csv` |
+| Sort | `id`, numeric, descending, nulls last |
+| Output table | `sorted_sequence` |
+| Output file | `.source-watcher/sort-sequence.db` |
+
+```bash
+sqlite3 .source-watcher/sort-sequence.db "SELECT * FROM sorted_sequence;"
+```
+
+---
+
+### `filter-sequence-to-sqlite`
+
+**Steps:** CSV Extractor → Filter Rows → Database Loader
+
+Reads the local sample numeric sequence, keeps rows whose `id` is greater than
+`5`, and writes the matching rows to SQLite. The Filter Rows transformer
+supports multiple conditions combined using `match: "all"` or `match: "any"`.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-sequence.csv` |
+| Filter | `id greaterThan 5` |
+| Output table | `filtered_sequence` |
+| Output file | `.source-watcher/filter-sequence.db` |
+
+```bash
+sqlite3 .source-watcher/filter-sequence.db "SELECT * FROM filtered_sequence;"
+```
+
+---
+
 ### `csv-lower-to-sqlite`
 
 **Steps:** CSV Extractor → Convert Case → Database Loader

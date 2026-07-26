@@ -1,0 +1,45 @@
+{
+    "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "steps": [
+        {
+            "type": "extractor",
+            "name": "Csv",
+            "options": {
+                "filePath": "/var/www/html/.source-watcher/data/sample-sequence.csv",
+                "columns": ["id", "label"],
+                "delimiter": ",",
+                "enclosure": "\""
+            },
+            "x": 80,
+            "y": 100
+        },
+        {
+            "type": "transformer",
+            "name": "FilterRows",
+            "options": {
+                "match": "all",
+                "conditions": [
+                    {
+                        "field": "id",
+                        "operator": "greaterThan",
+                        "value": 5
+                    }
+                ]
+            },
+            "x": 300,
+            "y": 100
+        },
+        {
+            "type": "loader",
+            "name": "Database",
+            "options": {
+                "driver": "pdo_sqlite",
+                "tableName": "filtered_sequence",
+                "path": "/var/www/html/.source-watcher/filter-sequence.db",
+                "memory": false
+            },
+            "x": 520,
+            "y": 100
+        }
+    ]
+}
