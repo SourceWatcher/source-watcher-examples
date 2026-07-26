@@ -1,0 +1,40 @@
+{
+    "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Demonstrates include mode and configured output-column ordering.",
+    "steps": [
+        {
+            "type": "extractor",
+            "name": "Csv",
+            "options": {
+                "filePath": "/var/www/html/.source-watcher/data/sample-duplicates.csv",
+                "columns": ["id", "name", "updated_at"],
+                "delimiter": ",",
+                "enclosure": "\""
+            },
+            "x": 80,
+            "y": 100
+        },
+        {
+            "type": "transformer",
+            "name": "ChooseColumns",
+            "options": {
+                "mode": "include",
+                "columns": ["name", "id"]
+            },
+            "x": 300,
+            "y": 100
+        },
+        {
+            "type": "loader",
+            "name": "Database",
+            "options": {
+                "driver": "pdo_sqlite",
+                "tableName": "selected_people_columns",
+                "path": "/var/www/html/.source-watcher/choose-columns.db",
+                "memory": false
+            },
+            "x": 520,
+            "y": 100
+        }
+    ]
+}

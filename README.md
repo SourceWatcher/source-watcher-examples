@@ -36,6 +36,27 @@ curl -X POST http://localhost:8181/api/v1/transformation-run \
 
 ## Pipelines
 
+### `choose-columns-to-sqlite`
+
+**Steps:** CSV Extractor → Choose Columns → Database Loader
+
+Reads the local duplicate-record sample, keeps only `name` and `id` in that
+configured order, and writes those columns to SQLite.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-duplicates.csv` |
+| Mode | Include |
+| Columns | `name`, `id` |
+| Output table | `selected_people_columns` |
+| Output file | `.source-watcher/choose-columns.db` |
+
+```bash
+sqlite3 .source-watcher/choose-columns.db "SELECT * FROM selected_people_columns;"
+```
+
+---
+
 ### `deduplicate-rows-to-sqlite`
 
 **Steps:** CSV Extractor → Deduplicate Rows → Database Loader
