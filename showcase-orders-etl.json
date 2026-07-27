@@ -20,7 +20,7 @@
                     {"field": "status", "operator": "equals", "value": "active"}
                 ]
             },
-            "x": 210,
+            "x": 220,
             "y": 80
         },
         {
@@ -35,7 +35,7 @@
                     "created_at": "date"
                 }
             },
-            "x": 380,
+            "x": 400,
             "y": 80
         },
         {
@@ -53,7 +53,7 @@
                     "created_at": {"required": true, "type": "date"}
                 }
             },
-            "x": 550,
+            "x": 580,
             "y": 80
         },
         {
@@ -63,8 +63,8 @@
                 "targetField": "full_name",
                 "expression": "concat(first_name, ' ', last_name)"
             },
-            "x": 720,
-            "y": 80
+            "x": 580,
+            "y": 270
         },
         {
             "type": "transformer",
@@ -73,8 +73,8 @@
                 "targetField": "total",
                 "expression": "price * quantity"
             },
-            "x": 890,
-            "y": 80
+            "x": 400,
+            "y": 270
         },
         {
             "type": "transformer",
@@ -84,8 +84,8 @@
                 "genderField": "gender",
                 "country": "usa"
             },
-            "x": 1060,
-            "y": 80
+            "x": 220,
+            "y": 270
         },
         {
             "type": "transformer",
@@ -96,8 +96,8 @@
                 "orderField": "created_at",
                 "orderDirection": "asc"
             },
-            "x": 1230,
-            "y": 80
+            "x": 40,
+            "y": 270
         },
         {
             "type": "transformer",
@@ -107,8 +107,8 @@
                     {"field": "total", "direction": "desc", "type": "numeric", "nulls": "last"}
                 ]
             },
-            "x": 1400,
-            "y": 80
+            "x": 40,
+            "y": 460
         },
         {
             "type": "transformer",
@@ -117,8 +117,8 @@
                 "mode": "include",
                 "columns": ["id", "full_name", "email", "gender", "total", "created_at"]
             },
-            "x": 1570,
-            "y": 80
+            "x": 220,
+            "y": 460
         },
         {
             "type": "transformer",
@@ -128,8 +128,8 @@
                     "total": "order_total"
                 }
             },
-            "x": 1740,
-            "y": 80
+            "x": 400,
+            "y": 460
         },
         {
             "type": "loader",
@@ -140,8 +140,8 @@
                 "path": "/var/www/html/.source-watcher/showcase-orders.db",
                 "memory": false
             },
-            "x": 1910,
-            "y": 80
+            "x": 580,
+            "y": 460
         }
     ]
 }
