@@ -1,0 +1,45 @@
+{
+    "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Converts CSV strings into integer, float, boolean, and date values before loading them into SQLite.",
+    "steps": [
+        {
+            "type": "extractor",
+            "name": "Csv",
+            "options": {
+                "filePath": "/var/www/html/.source-watcher/data/sample-types.csv",
+                "columns": ["id", "price", "active", "published_on"]
+            },
+            "x": 60,
+            "y": 100
+        },
+        {
+            "type": "transformer",
+            "name": "TypeConversion",
+            "options": {
+                "mode": "strict",
+                "emptyAsNull": true,
+                "nullHandling": "preserve",
+                "fields": {
+                    "id": "integer",
+                    "price": "float",
+                    "active": "boolean",
+                    "published_on": "date"
+                }
+            },
+            "x": 280,
+            "y": 100
+        },
+        {
+            "type": "loader",
+            "name": "Database",
+            "options": {
+                "driver": "pdo_sqlite",
+                "tableName": "converted_values",
+                "path": "/var/www/html/.source-watcher/type-conversion.db",
+                "memory": false
+            },
+            "x": 520,
+            "y": 100
+        }
+    ]
+}

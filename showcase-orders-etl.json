@@ -1,0 +1,147 @@
+{
+    "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Large showcase pipeline: filters active orders, converts and validates types, derives names and totals, enriches gender, deduplicates, sorts, selects and renames columns, then loads SQLite.",
+    "steps": [
+        {
+            "type": "extractor",
+            "name": "Csv",
+            "options": {
+                "filePath": "/var/www/html/.source-watcher/data/showcase-orders.csv"
+            },
+            "x": 40,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "FilterRows",
+            "options": {
+                "match": "all",
+                "conditions": [
+                    {"field": "status", "operator": "equals", "value": "active"}
+                ]
+            },
+            "x": 210,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "TypeConversion",
+            "options": {
+                "mode": "strict",
+                "fields": {
+                    "id": "integer",
+                    "price": "float",
+                    "quantity": "integer",
+                    "created_at": "date"
+                }
+            },
+            "x": 380,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "ValidateRows",
+            "options": {
+                "mode": "fail",
+                "rules": {
+                    "id": {"required": true, "type": "integer", "min": 1},
+                    "first_name": {"required": true, "type": "string", "minLength": 2},
+                    "last_name": {"required": true, "type": "string", "minLength": 2},
+                    "email": {"required": true, "format": "email"},
+                    "price": {"required": true, "type": "float", "min": 0},
+                    "quantity": {"required": true, "type": "integer", "min": 1},
+                    "created_at": {"required": true, "type": "date"}
+                }
+            },
+            "x": 550,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "DeriveField",
+            "options": {
+                "targetField": "full_name",
+                "expression": "concat(first_name, ' ', last_name)"
+            },
+            "x": 720,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "DeriveField",
+            "options": {
+                "targetField": "total",
+                "expression": "price * quantity"
+            },
+            "x": 890,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "GuessGender",
+            "options": {
+                "firstNameField": "first_name",
+                "genderField": "gender",
+                "country": "usa"
+            },
+            "x": 1060,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "DeduplicateRows",
+            "options": {
+                "keyFields": ["id"],
+                "keep": "last",
+                "orderField": "created_at",
+                "orderDirection": "asc"
+            },
+            "x": 1230,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "SortRows",
+            "options": {
+                "fields": [
+                    {"field": "total", "direction": "desc", "type": "numeric", "nulls": "last"}
+                ]
+            },
+            "x": 1400,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "ChooseColumns",
+            "options": {
+                "mode": "include",
+                "columns": ["id", "full_name", "email", "gender", "total", "created_at"]
+            },
+            "x": 1570,
+            "y": 80
+        },
+        {
+            "type": "transformer",
+            "name": "RenameColumns",
+            "options": {
+                "columns": {
+                    "total": "order_total"
+                }
+            },
+            "x": 1740,
+            "y": 80
+        },
+        {
+            "type": "loader",
+            "name": "Database",
+            "options": {
+                "driver": "pdo_sqlite",
+                "tableName": "showcase_orders",
+                "path": "/var/www/html/.source-watcher/showcase-orders.db",
+                "memory": false
+            },
+            "x": 1910,
+            "y": 80
+        }
+    ]
+}

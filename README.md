@@ -40,6 +40,60 @@ curl -X POST http://localhost:8181/api/v1/transformation-run \
 
 ## Pipelines
 
+### `showcase-orders-etl`
+
+**Steps:** CSV → Filter Rows → Type Conversion → Validate Rows → Derive Field ×2 → Guess Gender → Deduplicate Rows → Sort Rows → Choose Columns → Rename Columns → SQLite
+
+A larger end-to-end demonstration of Source Watcher. It keeps active orders,
+normalizes and validates types, derives `full_name` and `total`, enriches gender,
+keeps the latest record per ID, sorts by total, selects the final schema, renames
+`total` to `order_total`, and loads the result into SQLite.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/showcase-orders.csv` |
+| Steps | 12 |
+| Output table | `showcase_orders` |
+| Output file | `.source-watcher/showcase-orders.db` |
+
+```bash
+sqlite3 .source-watcher/showcase-orders.db "SELECT * FROM showcase_orders ORDER BY order_total DESC;"
+```
+
+---
+
+### `type-conversion-to-sqlite`
+
+**Steps:** CSV Extractor → Type Conversion → Database Loader
+
+Converts CSV strings into integer, float, boolean, and normalized date values
+before loading them into SQLite.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-types.csv` |
+| Output table | `converted_values` |
+| Output file | `.source-watcher/type-conversion.db` |
+
+---
+
+### `validate-rows-to-sqlite`
+
+**Steps:** CSV Extractor → Type Conversion → Validate Rows → Database Loader
+
+Normalizes sample order fields, validates required values, types, email format,
+allowed status values, and numeric bounds, then annotates each row with a
+`_validation_errors` array before loading it.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/showcase-orders.csv` |
+| Validation mode | Annotate |
+| Output table | `validated_orders` |
+| Output file | `.source-watcher/validate-rows.db` |
+
+---
+
 ### `derive-field-to-sqlite`
 
 **Steps:** CSV Extractor → Derive Field → Database Loader
