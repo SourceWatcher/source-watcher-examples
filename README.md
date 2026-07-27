@@ -40,6 +40,27 @@ curl -X POST http://localhost:8181/api/v1/transformation-run \
 
 ## Pipelines
 
+### `derive-field-to-sqlite`
+
+**Steps:** CSV Extractor → Derive Field → Database Loader
+
+Reads the local duplicate-record sample and creates `display_name` using
+`concat(name, ' (#', id, ')')` before loading the enriched rows into SQLite.
+
+| Detail | Value |
+|---|---|
+| Source | `.source-watcher/data/sample-duplicates.csv` |
+| Target field | `display_name` |
+| Expression | `concat(name, ' (#', id, ')')` |
+| Output table | `people_with_display_name` |
+| Output file | `.source-watcher/derive-field.db` |
+
+```bash
+sqlite3 .source-watcher/derive-field.db "SELECT id, name, display_name FROM people_with_display_name;"
+```
+
+---
+
 ### `choose-columns-to-sqlite`
 
 **Steps:** CSV Extractor → Choose Columns → Database Loader
