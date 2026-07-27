@@ -8,8 +8,8 @@
             "options": {
                 "filePath": "/var/www/html/.source-watcher/data/showcase-orders.csv"
             },
-            "x": 40,
-            "y": 80
+            "x": 100,
+            "y": 60
         },
         {
             "type": "transformer",
@@ -17,11 +17,15 @@
             "options": {
                 "match": "all",
                 "conditions": [
-                    {"field": "status", "operator": "equals", "value": "active"}
+                    {
+                        "field": "status",
+                        "operator": "equals",
+                        "value": "active"
+                    }
                 ]
             },
-            "x": 220,
-            "y": 80
+            "x": 300,
+            "y": 60
         },
         {
             "type": "transformer",
@@ -35,8 +39,8 @@
                     "created_at": "date"
                 }
             },
-            "x": 400,
-            "y": 80
+            "x": 500,
+            "y": 60
         },
         {
             "type": "transformer",
@@ -44,17 +48,43 @@
             "options": {
                 "mode": "fail",
                 "rules": {
-                    "id": {"required": true, "type": "integer", "min": 1},
-                    "first_name": {"required": true, "type": "string", "minLength": 2},
-                    "last_name": {"required": true, "type": "string", "minLength": 2},
-                    "email": {"required": true, "format": "email"},
-                    "price": {"required": true, "type": "float", "min": 0},
-                    "quantity": {"required": true, "type": "integer", "min": 1},
-                    "created_at": {"required": true, "type": "date"}
+                    "id": {
+                        "required": true,
+                        "type": "integer",
+                        "min": 1
+                    },
+                    "first_name": {
+                        "required": true,
+                        "type": "string",
+                        "minLength": 2
+                    },
+                    "last_name": {
+                        "required": true,
+                        "type": "string",
+                        "minLength": 2
+                    },
+                    "email": {
+                        "required": true,
+                        "format": "email"
+                    },
+                    "price": {
+                        "required": true,
+                        "type": "float",
+                        "min": 0
+                    },
+                    "quantity": {
+                        "required": true,
+                        "type": "integer",
+                        "min": 1
+                    },
+                    "created_at": {
+                        "required": true,
+                        "type": "date"
+                    }
                 }
             },
-            "x": 580,
-            "y": 80
+            "x": 700,
+            "y": 60
         },
         {
             "type": "transformer",
@@ -63,8 +93,8 @@
                 "targetField": "full_name",
                 "expression": "concat(first_name, ' ', last_name)"
             },
-            "x": 580,
-            "y": 270
+            "x": 100,
+            "y": 180
         },
         {
             "type": "transformer",
@@ -73,8 +103,8 @@
                 "targetField": "total",
                 "expression": "price * quantity"
             },
-            "x": 400,
-            "y": 270
+            "x": 300,
+            "y": 180
         },
         {
             "type": "transformer",
@@ -84,41 +114,55 @@
                 "genderField": "gender",
                 "country": "usa"
             },
-            "x": 220,
-            "y": 270
+            "x": 500,
+            "y": 180
         },
         {
             "type": "transformer",
             "name": "DeduplicateRows",
             "options": {
-                "keyFields": ["id"],
+                "keyFields": [
+                    "id"
+                ],
                 "keep": "last",
                 "orderField": "created_at",
                 "orderDirection": "asc"
             },
-            "x": 40,
-            "y": 270
+            "x": 700,
+            "y": 180
         },
         {
             "type": "transformer",
             "name": "SortRows",
             "options": {
                 "fields": [
-                    {"field": "total", "direction": "desc", "type": "numeric", "nulls": "last"}
+                    {
+                        "field": "total",
+                        "direction": "desc",
+                        "type": "numeric",
+                        "nulls": "last"
+                    }
                 ]
             },
-            "x": 40,
-            "y": 460
+            "x": 100,
+            "y": 300
         },
         {
             "type": "transformer",
             "name": "ChooseColumns",
             "options": {
                 "mode": "include",
-                "columns": ["id", "full_name", "email", "gender", "total", "created_at"]
+                "columns": [
+                    "id",
+                    "full_name",
+                    "email",
+                    "gender",
+                    "total",
+                    "created_at"
+                ]
             },
-            "x": 220,
-            "y": 460
+            "x": 300,
+            "y": 300
         },
         {
             "type": "transformer",
@@ -128,8 +172,8 @@
                     "total": "order_total"
                 }
             },
-            "x": 400,
-            "y": 460
+            "x": 500,
+            "y": 300
         },
         {
             "type": "loader",
@@ -140,8 +184,8 @@
                 "path": "/var/www/html/.source-watcher/showcase-orders.db",
                 "memory": false
             },
-            "x": 580,
-            "y": 460
+            "x": 700,
+            "y": 300
         }
     ]
 }
