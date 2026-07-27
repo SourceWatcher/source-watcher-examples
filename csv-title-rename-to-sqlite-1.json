@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Applies title case to the Movie column name, renames it to Preferred_Movie, and loads the CSV into SQLite.",
     "steps": [
         {
             "type": "extractor",

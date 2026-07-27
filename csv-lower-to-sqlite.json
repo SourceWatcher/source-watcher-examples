@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Loads the Oscar winners CSV, converts selected column names to lowercase, and writes the rows to SQLite.",
     "steps": [
         {
             "type": "extractor",

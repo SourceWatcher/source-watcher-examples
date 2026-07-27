@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Development-only pipeline that intentionally exercises transformation-run error reporting.",
     "steps": [
         {
             "type": "extractor",

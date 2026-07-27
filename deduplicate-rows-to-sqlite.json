@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Deduplicates sample people by ID, retaining the latest row according to updated_at, then writes the result to SQLite.",
     "steps": [
         {
             "type": "extractor",

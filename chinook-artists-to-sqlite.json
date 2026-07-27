@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Copies artists from the Chinook SQLite database into a separate SQLite output table.",
     "steps": [
         {
             "type": "extractor",

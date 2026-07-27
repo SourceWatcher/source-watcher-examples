@@ -4,6 +4,10 @@ Example pipeline JSON files for the [Source Watcher API](https://github.com/TheC
 
 Each file is validated against the [pipeline schema](https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json). A pipeline is a `steps` array of extractors, transformers, and loaders.
 
+Every example also includes a top-level `notes` value. The board displays these
+notes as a read-only card on the work pane and provides an Edit dialog for
+updating them.
+
 ---
 
 ## Prerequisites

@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Sorts the sample sequence by numeric ID in descending order and writes the ordered rows to SQLite.",
     "steps": [
         {
             "type": "extractor",

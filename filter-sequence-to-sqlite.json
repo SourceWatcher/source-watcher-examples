@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Filters the sample sequence to IDs greater than five and loads only matching rows into SQLite.",
     "steps": [
         {
             "type": "extractor",

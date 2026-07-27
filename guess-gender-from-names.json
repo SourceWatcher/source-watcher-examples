@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Reads sample names, adds a predicted gender field, and writes the enriched rows to SQLite.",
     "steps": [
         {
             "type": "extractor",

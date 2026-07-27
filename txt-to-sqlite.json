@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Reads the sample text file line by line and stores the extracted rows in SQLite.",
     "steps": [
         {
             "type": "extractor",

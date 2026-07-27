@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Extracts text from the sample PDF, using OCR when required, and stores page text in SQLite.",
     "steps": [
         {
             "type": "extractor",

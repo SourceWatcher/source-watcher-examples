@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Runs Tesseract OCR against the sample image and stores each extracted text line in SQLite.",
     "steps": [
         {
             "type": "extractor",

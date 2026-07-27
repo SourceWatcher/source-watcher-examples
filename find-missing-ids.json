@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Finds missing numeric IDs between the minimum and maximum values in the sample sequence and stores them in SQLite.",
     "steps": [
         {
             "type": "extractor",

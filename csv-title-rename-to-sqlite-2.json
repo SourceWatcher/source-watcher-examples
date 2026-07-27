@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/TheCocoTeam/source-watcher-api/master/pipeline.schema.json",
+    "notes": "Experimental title-case and rename pipeline using a lowercase movie mapping; retained to demonstrate case-sensitive mappings.",
     "steps": [
         {
             "type": "extractor",
