@@ -40,6 +40,33 @@ curl -X POST http://localhost:8181/api/v1/transformation-run \
 
 ## Pipelines
 
+### Step-type combination coverage
+
+The demos collectively exercise every connection supported by the board between
+an output-producing step and an input-consuming step.
+
+| From | To | Example |
+|---|---|---|
+| Extractor | Execution extractor | `find-missing-ids` |
+| Extractor | Transformer | `filter-sequence-to-sqlite` |
+| Extractor | Loader | `chinook-artists-to-sqlite` |
+| Execution extractor | Execution extractor | `execution-extractor-to-execution-extractor` |
+| Execution extractor | Transformer | `execution-extractor-to-transformer` |
+| Execution extractor | Loader | `find-missing-ids` |
+| Transformer | Execution extractor | `transformer-to-execution-extractor` |
+| Transformer | Transformer | `csv-lower-rename-to-sqlite` |
+| Transformer | Loader | `filter-sequence-to-sqlite` |
+
+Run the coverage check after adding or changing demos:
+
+```bash
+bash tests/validate-demo-combinations.sh
+```
+
+The three combination-focused demos all use `sample-sequence.csv`. They write
+to separate SQLite databases and are intentionally small enough to make the
+handoff between the two middle steps easy to inspect.
+
 ### `showcase-orders-etl`
 
 **Steps:** CSV → Filter Rows → Type Conversion → Validate Rows → Derive Field ×2 → Guess Gender → Deduplicate Rows → Sort Rows → Choose Columns → Rename Columns → SQLite
